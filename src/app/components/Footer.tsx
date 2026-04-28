@@ -71,12 +71,12 @@ export function Footer() {
           <div>
             <h3 className="font-display text-2xl mb-6 text-secondary">Our Services</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Flight Booking</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Hotel Reservations</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Car Rentals</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Tour Packages</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">Travel Insurance</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors duration-200">24/7 Support</a></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors duration-200">Flight Booking</Link></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors duration-200">Hotel Reservations</Link></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors duration-200">Car Rentals</Link></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors duration-200">Tour Packages</Link></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors duration-200">Travel Insurance</Link></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors duration-200">24/7 Support</Link></li>
             </ul>
           </div>
 

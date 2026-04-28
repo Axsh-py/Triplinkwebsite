@@ -54,10 +54,10 @@ export function Header() {
               <Phone size={18} className="text-secondary" />
               <span className="text-sm font-poppins font-medium">+91 82386 23437</span>
             </a>
-            <button className="relative group bg-gradient-to-r from-secondary via-yellow-500 to-yellow-400 text-primary px-7 py-3 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden font-poppins font-semibold text-sm shadow-lg">
+            <Link to="/contact" className="relative group bg-gradient-to-r from-secondary via-yellow-500 to-yellow-400 text-primary px-7 py-3 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden font-poppins font-semibold text-sm shadow-lg">
               <span className="relative z-10">Book Your Adventure</span>
               <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
+            </Link>
           </div>
 
           <div className="lg:hidden">
@@ -93,9 +93,9 @@ export function Header() {
                 <Phone size={18} className="text-secondary" />
                 <span className="font-poppins">+91 82386 23437</span>
               </a>
-              <button className="w-full bg-gradient-to-r from-secondary via-yellow-500 to-secondary text-primary px-6 py-4 rounded-full hover:shadow-xl transition-all duration-300 font-poppins font-semibold">
+              <Link to="/contact" className="block text-center w-full bg-gradient-to-r from-secondary via-yellow-500 to-secondary text-primary px-6 py-4 rounded-full hover:shadow-xl transition-all duration-300 font-poppins font-semibold" onClick={() => setIsMenuOpen(false)}>
                 Book Your Adventure
-              </button>
+              </Link>
             </div>
           </div>
         )}

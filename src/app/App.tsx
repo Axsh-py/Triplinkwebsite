@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { TopBanner } from './components/TopBanner';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -33,9 +33,9 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ScrollToTop />
       <AppContent />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
