@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone } from 'lucide-react';
-import logo from "../../imports/WhatsApp_Image_2026-04-26_at_8.54.54_PM.jpeg";
+import logo from '../../imports/triplink_logo_transparent.png';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,6 +18,7 @@ export function Header() {
 
   const navLinks = [
     { name: 'Home', path: '/' },
+    { name: 'Trips', path: '/trips' },
     { name: 'Services', path: '/services' },
     { name: 'About Us', path: '/about' },
     { name: 'Contact', path: '/contact' },
@@ -30,7 +31,7 @@ export function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
-            <img src={logo} alt="Triplink" className="h-16 md:h-20 lg:h-24 w-auto" />
+            <img src={logo} alt="Triplink" className="h-10 sm:h-12 lg:h-14 w-auto max-w-[190px] xl:max-w-[220px] object-contain" />
           </Link>
 
           <div className="hidden lg:flex items-center space-x-1 bg-white/95 backdrop-blur-sm rounded-full px-2 py-2 shadow-lg">
@@ -38,8 +39,8 @@ export function Header() {
               <Link
                 key={link.name}
                 to={link.path}
-                className={`font-poppins font-medium px-5 py-2.5 rounded-full transition-all duration-300 ${
-                  location.pathname === link.path
+                  className={`font-poppins font-medium px-4 py-2.5 rounded-full transition-all duration-300 ${
+                  (link.path === '/' ? location.pathname === '/' : location.pathname.startsWith(link.path))
                     ? 'bg-primary text-white shadow-md'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
@@ -50,7 +51,7 @@ export function Header() {
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
-            <a href="tel:+918238623437" className="flex items-center gap-2 px-4 py-2.5 rounded-full transition-all duration-300 text-primary hover:bg-gray-100">
+            <a href="tel:+918238623437" className="hidden xl:flex items-center gap-2 px-4 py-2.5 rounded-full transition-all duration-300 text-primary hover:bg-gray-100">
               <Phone size={18} className="text-secondary" />
               <span className="text-sm font-poppins font-medium">+91 82386 23437</span>
             </a>
@@ -78,7 +79,7 @@ export function Header() {
                   key={link.name}
                   to={link.path}
                   className={`block px-4 py-3 rounded-xl transition-all duration-200 font-poppins font-medium ${
-                    location.pathname === link.path
+                    (link.path === '/' ? location.pathname === '/' : location.pathname.startsWith(link.path))
                       ? 'bg-primary text-white'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}

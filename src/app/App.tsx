@@ -8,25 +8,32 @@ import { HomePage } from './pages/HomePage';
 import { ServicesPage } from './pages/ServicesPage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
+import { AdminPage } from './pages/AdminPage';
+import { TripsPage } from './pages/TripsPage';
+import { TripDetailPage } from './pages/TripDetailPage';
 
 function AppContent() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const isAdminPage = location.pathname.startsWith('/admin');
 
   return (
     <div className="min-h-screen bg-white">
-      <TopBanner />
-      {!isHomePage && <Header />}
+      {!isAdminPage && <TopBanner />}
+      {!isHomePage && !isAdminPage && <Header />}
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/trips" element={<TripsPage />} />
+          <Route path="/trips/:tripId" element={<TripDetailPage />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </main>
-      <Footer />
-      <FloatingCTA />
+      {!isAdminPage && <Footer />}
+      {!isAdminPage && <FloatingCTA />}
     </div>
   );
 }

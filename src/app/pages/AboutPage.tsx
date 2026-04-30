@@ -1,6 +1,6 @@
 import { Award, Globe, Heart, TrendingUp, Users, Target, Eye, CheckCircle, Handshake } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
-import logo from "../../imports/WhatsApp_Image_2026-04-26_at_8.54.54_PM.jpeg";
+import logo from '../../imports/triplink_logo_transparent.png';
 
 export function AboutPage() {
   const stats = [
@@ -54,7 +54,7 @@ export function AboutPage() {
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <img src={logo} alt="Triplink" className="h-20 w-auto mx-auto mb-8 brightness-0 invert" />
+          <img src={logo} alt="Triplink" className="h-14 sm:h-16 md:h-20 w-auto max-w-[360px] mx-auto mb-8 object-contain drop-shadow-xl" />
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white mb-4 sm:mb-6">
             About Triplink
           </h1>

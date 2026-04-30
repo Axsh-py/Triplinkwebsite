@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
-import logo from "../../imports/WhatsApp_Image_2026-04-26_at_8.54.54_PM.jpeg";
+import logo from '../../imports/triplink_logo_transparent.png';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -15,7 +15,7 @@ export function Footer() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           <div>
-            <img src={logo} alt="Triplink" className="h-14 w-auto mb-6" />
+            <img src={logo} alt="Triplink" className="h-12 w-auto max-w-[220px] object-contain mb-6 drop-shadow-lg" />
             <p className="text-gray-300 mb-8 leading-relaxed font-light max-w-sm">
               Your trusted partner for crafting unforgettable journeys around the world since 1999. <span className="text-secondary font-medium">Experience travel redefined</span>.
             </p>
@@ -45,6 +45,12 @@ export function Footer() {
                 <Link to="/" className="text-gray-300 hover:text-secondary transition-colors duration-200 flex items-center gap-2 group">
                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-200" />
                   Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/trips" className="text-gray-300 hover:text-secondary transition-colors duration-200 flex items-center gap-2 group">
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-200" />
+                  Trips
                 </Link>
               </li>
               <li>

@@ -1,10 +1,12 @@
 import { Sparkles, X } from 'lucide-react';
 import { useState } from 'react';
+import { useSiteContent } from '../content/siteContent';
 
 export function TopBanner() {
   const [isVisible, setIsVisible] = useState(true);
+  const { topBanner } = useSiteContent();
 
-  if (!isVisible) return null;
+  if (!topBanner.enabled || !isVisible) return null;
 
   return (
     <div className="bg-gradient-to-r from-secondary via-yellow-500 to-secondary text-primary py-3 px-4 relative overflow-hidden">
@@ -13,11 +15,12 @@ export function TopBanner() {
       <div className="relative max-w-7xl mx-auto flex items-center justify-center gap-3 text-center">
         <Sparkles size={20} className="hidden sm:block animate-pulse" />
         <p className="text-sm md:text-base">
-          <span className="font-semibold">🎉 Special Offer!</span> Get up to <span className="font-bold">30% OFF</span> on all international packages. Limited time only!
+          <span className="font-semibold">{topBanner.text}</span>
         </p>
         <button
           onClick={() => setIsVisible(false)}
           className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 hover:bg-primary/10 p-1 rounded transition-colors duration-200"
+          aria-label="Close offer banner"
         >
           <X size={18} />
         </button>
