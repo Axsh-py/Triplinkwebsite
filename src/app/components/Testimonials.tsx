@@ -4,28 +4,28 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 export function Testimonials() {
   const testimonials = [
     {
-      name: 'Sarah Johnson',
-      location: 'New York, USA',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
+      name: 'Aarav Mehta',
+      location: 'Pune, Maharashtra',
+      image: 'https://images.unsplash.com/photo-1665034868573-5b63c589b70c?w=400&auto=format&fit=crop',
       rating: 5,
-      text: 'Triplink made our honeymoon to Maldives absolutely perfect! Every detail was taken care of, and the experiences were beyond our expectations. Highly recommended!',
-      trip: 'Maldives Honeymoon Package',
+      text: 'I was trying to plan Ladakh on my own, but permits, stays and backup transport were getting difficult to manage. Triplink kept the route practical, the hotels were clean, and the daily WhatsApp updates made the whole trip feel very organised.',
+      trip: 'Ladakh Group Adventure',
     },
     {
-      name: 'Michael Chen',
-      location: 'San Francisco, USA',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+      name: 'Neha Sharma',
+      location: 'Delhi NCR',
+      image: 'https://images.unsplash.com/photo-1654436200209-de489ed205df?w=400&auto=format&fit=crop',
       rating: 5,
-      text: 'Amazing service and incredible value. The team helped us plan a family trip to Japan that we will never forget. Professional, responsive, and truly cared about our experience.',
-      trip: 'Japan Family Tour',
+      text: 'We travelled to Kashmir with my parents, so safety and hotel location mattered a lot. The driver was punctual, the team helped with Gulmarg gondola planning, and the itinerary never felt rushed. It was a comfortable family holiday.',
+      trip: 'Kashmir Family Vacation',
     },
     {
-      name: 'Emma Williams',
-      location: 'London, UK',
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400',
+      name: 'Rohan Nair',
+      location: 'Bengaluru, Karnataka',
+      image: 'https://images.unsplash.com/photo-1619890632764-87d5fc97840a?w=400&auto=format&fit=crop',
       rating: 5,
-      text: 'As a solo traveler, I felt completely safe and supported throughout my Bali adventure. The itinerary was perfect, and I made memories that will last a lifetime!',
-      trip: 'Solo Bali Adventure',
+      text: 'Our Kerala plan was smooth from the airport pickup to the Munnar stay and Alleppey houseboat. One day had to be changed because of rain, but the team arranged an alternative quickly. The budget was clear and there were no surprise charges.',
+      trip: 'Kerala Couple Getaway',
     },
   ];
 
@@ -34,13 +34,13 @@ export function Testimonials() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-secondary/10 to-yellow-500/10 text-primary px-6 py-3 rounded-full mb-6 border border-secondary/20">
-            <span>Testimonials</span>
+            <span>Traveller Reviews</span>
           </div>
           <h2 className="text-4xl md:text-6xl text-primary mb-6">
-            Loved by <span className="text-secondary">50,000+</span> Travelers
+            Loved by <span className="text-secondary">50,000+</span> Indian Travellers
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Real stories from real travelers who have explored the world with Triplink
+            Honest notes from families, couples and groups who planned their trips with Triplink
           </p>
         </div>
 
@@ -60,7 +60,7 @@ export function Testimonials() {
                 ))}
               </div>
 
-              <p className="text-gray-700 mb-6 leading-relaxed italic">
+              <p className="text-gray-700 mb-6 leading-relaxed">
                 "{testimonial.text}"
               </p>
 
@@ -97,7 +97,7 @@ export function Testimonials() {
             </div>
             <div className="text-center border-r border-white/20 pr-8">
               <div className="text-4xl text-secondary mb-2">50K+</div>
-              <p className="text-sm text-gray-300">Happy Travelers</p>
+              <p className="text-sm text-gray-300">Happy Travellers</p>
             </div>
             <div className="text-center">
               <div className="text-4xl text-secondary mb-2">98%</div>
