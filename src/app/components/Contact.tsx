@@ -1,4 +1,5 @@
 import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { contactInfo } from '../content/contactInfo';
 
 export function Contact() {
   return (
@@ -25,8 +26,8 @@ export function Contact() {
               <Phone size={28} />
             </div>
             <h3 className="text-xl mb-4">Phone</h3>
-            <a href="tel:+918238623437" className="text-gray-200 hover:text-secondary transition-colors block">
-              +91 82386 23437
+            <a href={`tel:${contactInfo.phoneTel}`} className="text-gray-200 hover:text-secondary transition-colors block">
+              {contactInfo.phoneDisplay}
             </a>
           </div>
 
@@ -35,8 +36,8 @@ export function Contact() {
               <Mail size={28} />
             </div>
             <h3 className="text-xl mb-4">Email</h3>
-            <a href="mailto:contact@triplinktours.com" className="text-gray-200 hover:text-secondary transition-colors block">
-              contact@triplinktours.com
+            <a href={`mailto:${contactInfo.email}`} className="text-gray-200 hover:text-secondary transition-colors block">
+              {contactInfo.email}
             </a>
           </div>
 
@@ -44,9 +45,9 @@ export function Contact() {
             <div className="bg-secondary text-primary p-4 rounded-xl w-fit mb-6">
               <MapPin size={28} />
             </div>
-            <h3 className="text-xl mb-4">Website</h3>
-            <a href="https://triplinktours.com" target="_blank" rel="noopener noreferrer" className="text-gray-200 hover:text-secondary transition-colors block">
-              triplinktours.com
+            <h3 className="text-xl mb-4">Instagram</h3>
+            <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="text-gray-200 hover:text-secondary transition-colors block">
+              triplink_adventures
             </a>
           </div>
         </div>

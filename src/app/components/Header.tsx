@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone } from 'lucide-react';
+import { contactInfo } from '../content/contactInfo';
 import logo from '../../imports/triplink_logo_transparent.png';
 
 export function Header() {
@@ -51,9 +52,9 @@ export function Header() {
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
-            <a href="tel:+918238623437" className="hidden xl:flex items-center gap-2 px-4 py-2.5 rounded-full transition-all duration-300 text-primary hover:bg-gray-100">
+            <a href={`tel:${contactInfo.phoneTel}`} className="hidden xl:flex items-center gap-2 px-4 py-2.5 rounded-full transition-all duration-300 text-primary hover:bg-gray-100">
               <Phone size={18} className="text-secondary" />
-              <span className="text-sm font-poppins font-medium">+91 82386 23437</span>
+              <span className="text-sm font-poppins font-medium">{contactInfo.phoneDisplay}</span>
             </a>
             <Link to="/contact" className="relative group bg-gradient-to-r from-secondary via-yellow-500 to-yellow-400 text-primary px-7 py-3 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden font-poppins font-semibold text-sm shadow-lg">
               <span className="relative z-10">Book Your Adventure</span>
@@ -92,9 +93,9 @@ export function Header() {
               ))}
             </div>
             <div className="mt-6 space-y-3">
-              <a href="tel:+918238623437" className="flex items-center gap-2 px-4 py-3 rounded-xl bg-gray-100 text-primary">
+              <a href={`tel:${contactInfo.phoneTel}`} className="flex items-center gap-2 px-4 py-3 rounded-xl bg-gray-100 text-primary">
                 <Phone size={18} className="text-secondary" />
-                <span className="font-poppins">+91 82386 23437</span>
+                <span className="font-poppins">{contactInfo.phoneDisplay}</span>
               </a>
               <Link to="/contact" className="block text-center w-full bg-gradient-to-r from-secondary via-yellow-500 to-secondary text-primary px-6 py-4 rounded-full hover:shadow-xl transition-all duration-300 font-poppins font-semibold" onClick={() => setIsMenuOpen(false)}>
                 Book Your Adventure

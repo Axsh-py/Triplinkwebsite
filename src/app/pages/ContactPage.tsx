@@ -1,14 +1,16 @@
 import { Contact } from '../components/Contact';
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { contactInfo } from '../content/contactInfo';
 
 export function ContactPage() {
   const offices = [
     {
       city: 'Triplink Tours (Headquarters)',
       address: 'India',
-      phone: '+91 82386 23437',
-      email: 'contact@triplinktours.com',
+      phone: contactInfo.phoneDisplay,
+      phoneTel: contactInfo.phoneTel,
+      email: contactInfo.email,
       image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600',
     },
   ];
@@ -78,7 +80,7 @@ export function ContactPage() {
 
                   <div className="flex items-center gap-3">
                     <Phone size={20} className="text-secondary flex-shrink-0" />
-                    <a href={`tel:${office.phone}`} className="text-gray-700 hover:text-primary">
+                    <a href={`tel:${office.phoneTel}`} className="text-gray-700 hover:text-primary">
                       {office.phone}
                     </a>
                   </div>
@@ -133,13 +135,13 @@ export function ContactPage() {
                   <div className="flex items-center gap-2">
                     <Phone size={16} className="text-secondary" />
                     <span>Phone:</span>
-                    <a href="tel:+918238623437" className="text-secondary hover:underline">+91 82386 23437</a>
+                    <a href={`tel:${contactInfo.phoneTel}`} className="text-secondary hover:underline">{contactInfo.phoneDisplay}</a>
                   </div>
                   <div className="flex items-start gap-2">
                     <Mail size={16} className="text-secondary mt-1 flex-shrink-0" />
                     <div>
                       <span>Email:</span>
-                      <a href="mailto:contact@triplinktours.com" className="text-secondary hover:underline">contact@triplinktours.com</a>
+                      <a href={`mailto:${contactInfo.email}`} className="text-secondary hover:underline">{contactInfo.email}</a>
                       <p className="text-sm text-gray-500">Response within 24 hours</p>
                     </div>
                   </div>
@@ -222,13 +224,13 @@ export function ContactPage() {
           </p>
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center">
             <a
-              href="tel:+918238623437"
+              href={`tel:${contactInfo.phoneTel}`}
               className="bg-gradient-to-r from-secondary to-yellow-500 text-primary px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 font-poppins font-bold text-sm sm:text-base text-center"
             >
-              Call: +91 82386 23437
+              Call: {contactInfo.phoneDisplay}
             </a>
             <a
-              href="https://wa.me/918238623437"
+              href={`https://wa.me/${contactInfo.whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-green-500 text-white px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 font-poppins font-semibold text-sm sm:text-base text-center"

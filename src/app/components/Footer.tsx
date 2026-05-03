@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { contactInfo } from '../content/contactInfo';
 import logo from '../../imports/triplink_logo_transparent.png';
 
 export function Footer() {
@@ -20,20 +21,17 @@ export function Footer() {
               Your trusted partner for crafting unforgettable journeys around the world since 1999. <span className="text-secondary font-medium">Experience travel redefined</span>.
             </p>
             <div className="flex gap-3">
-              <a href="https://facebook.com/triplink_adventures" target="_blank" rel="noopener noreferrer" className="glass-dark hover:bg-secondary text-white hover:text-primary p-4 rounded-xl transition-all duration-300 hover:scale-110 luxury-shadow">
+              <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="glass-dark hover:bg-secondary text-white hover:text-primary p-4 rounded-xl transition-all duration-300 hover:scale-110 luxury-shadow" aria-label="Facebook">
                 <Facebook size={20} />
               </a>
-              <a href="https://twitter.com/triplink_adventures" target="_blank" rel="noopener noreferrer" className="glass-dark hover:bg-secondary text-white hover:text-primary p-4 rounded-xl transition-all duration-300 hover:scale-110 luxury-shadow">
-                <Twitter size={20} />
-              </a>
-              <a href="https://instagram.com/triplink_adventures" target="_blank" rel="noopener noreferrer" className="glass-dark hover:bg-secondary text-white hover:text-primary p-4 rounded-xl transition-all duration-300 hover:scale-110 luxury-shadow">
+              <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="glass-dark hover:bg-secondary text-white hover:text-primary p-4 rounded-xl transition-all duration-300 hover:scale-110 luxury-shadow" aria-label="Instagram">
                 <Instagram size={20} />
               </a>
-              <a href="https://linkedin.com/company/triplink_adventures" target="_blank" rel="noopener noreferrer" className="glass-dark hover:bg-secondary text-white hover:text-primary p-4 rounded-xl transition-all duration-300 hover:scale-110 luxury-shadow">
-                <Linkedin size={20} />
-              </a>
-              <a href="https://youtube.com/@triplink_adventures" target="_blank" rel="noopener noreferrer" className="glass-dark hover:bg-secondary text-white hover:text-primary p-4 rounded-xl transition-all duration-300 hover:scale-110 luxury-shadow">
+              <a href={contactInfo.youtube} target="_blank" rel="noopener noreferrer" className="glass-dark hover:bg-secondary text-white hover:text-primary p-4 rounded-xl transition-all duration-300 hover:scale-110 luxury-shadow" aria-label="YouTube">
                 <Youtube size={20} />
+              </a>
+              <a href={`mailto:${contactInfo.email}`} className="glass-dark hover:bg-secondary text-white hover:text-primary p-4 rounded-xl transition-all duration-300 hover:scale-110 luxury-shadow" aria-label="Email">
+                <Mail size={20} />
               </a>
             </div>
           </div>
@@ -92,19 +90,19 @@ export function Footer() {
               <div className="flex items-start gap-3">
                 <Phone size={18} className="text-secondary mt-1 flex-shrink-0" />
                 <div>
-                  <a href="tel:+918238623437" className="text-gray-300 hover:text-secondary transition-colors">+91 82386 23437</a>
+                  <a href={`tel:${contactInfo.phoneTel}`} className="text-gray-300 hover:text-secondary transition-colors">{contactInfo.phoneDisplay}</a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <Mail size={18} className="text-secondary mt-1 flex-shrink-0" />
                 <div>
-                  <a href="mailto:contact@triplinktours.com" className="text-gray-300 hover:text-secondary transition-colors">contact@triplinktours.com</a>
+                  <a href={`mailto:${contactInfo.email}`} className="text-gray-300 hover:text-secondary transition-colors">{contactInfo.email}</a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <MapPin size={18} className="text-secondary mt-1 flex-shrink-0" />
                 <div>
-                  <a href="https://triplinktours.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-secondary transition-colors">triplinktours.com</a>
+                  <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-secondary transition-colors">triplink_adventures</a>
                 </div>
               </div>
             </div>

@@ -1,8 +1,6 @@
 import { MessageCircle, Phone, X } from 'lucide-react';
 import { useState } from 'react';
-
-const phoneNumber = '+918238623437';
-const whatsappNumber = '918238623437';
+import { contactInfo } from '../content/contactInfo';
 
 export function FloatingCTA() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,14 +24,14 @@ export function FloatingCTA() {
           </p>
           <div className="space-y-3">
             <a
-              href={`tel:${phoneNumber}`}
+              href={`tel:${contactInfo.phoneTel}`}
               className="flex items-center gap-3 bg-gradient-to-r from-secondary to-yellow-500 text-primary px-4 py-3 rounded-xl hover:shadow-lg transition-all duration-300"
             >
               <Phone size={18} />
               <span>Call Now</span>
             </a>
             <a
-              href={`https://wa.me/${whatsappNumber}`}
+              href={`https://wa.me/${contactInfo.whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 bg-green-500 text-white px-4 py-3 rounded-xl hover:shadow-lg transition-all duration-300"

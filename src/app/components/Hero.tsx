@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { MapPin, Menu, Phone, X } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { contactInfo } from '../content/contactInfo';
 import { defaultSiteContent, useSiteContent } from '../content/siteContent';
 import { TripEnquiryButton } from './TripEnquiryButton';
 import logo from '../../imports/triplink_logo_transparent.png';
@@ -85,7 +86,7 @@ export function Hero() {
             </div>
 
             <div className="hidden lg:flex items-center gap-4">
-              <a href="tel:+918238623437" className="text-white hover:text-secondary transition-colors">
+              <a href={`tel:${contactInfo.phoneTel}`} className="text-white hover:text-secondary transition-colors">
                 <Phone size={20} />
               </a>
               <Link to="/contact" className="bg-gradient-to-r from-secondary via-yellow-500 to-yellow-400 text-primary px-6 py-2 rounded-md font-poppins font-bold text-sm hover:scale-105 transition-all duration-300">
@@ -124,11 +125,11 @@ export function Hero() {
               </div>
               <div className="mt-3 grid gap-2 border-t border-white/10 pt-3">
                 <a
-                  href="tel:+918238623437"
+                  href={`tel:${contactInfo.phoneTel}`}
                   className="flex items-center justify-center gap-2 rounded-md bg-white/10 px-4 py-3 text-sm font-semibold text-white"
                 >
                   <Phone size={16} className="text-secondary" />
-                  +91 82386 23437
+                  {contactInfo.phoneDisplay}
                 </a>
                 <Link
                   to="/contact"

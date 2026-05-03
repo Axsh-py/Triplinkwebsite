@@ -1,6 +1,7 @@
 import { type FormEvent, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CalendarDays, Mail, Phone, Send, X } from 'lucide-react';
+import { contactInfo } from '../content/contactInfo';
 
 type EnquiryTrip = {
   id?: string;
@@ -19,8 +20,6 @@ type TripEnquiryButtonProps = {
   className?: string;
   children?: ReactNode;
 };
-
-const COMPANY_EMAIL = 'contact@triplinktours.com';
 
 function getTripName(trip: EnquiryTrip) {
   return trip.name || trip.title || 'Triplink trip';
@@ -92,7 +91,7 @@ export function TripEnquiryButton({
       .filter(Boolean)
       .join('\n');
 
-    window.location.href = `mailto:${COMPANY_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:${contactInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setIsOpen(false);
   };
 
@@ -140,7 +139,7 @@ export function TripEnquiryButton({
                 )}
                 <div className="flex min-w-0 items-center gap-2 break-all">
                   <Mail size={16} className="text-secondary" />
-                  {COMPANY_EMAIL}
+                  {contactInfo.email}
                 </div>
               </div>
 
@@ -205,7 +204,7 @@ export function TripEnquiryButton({
               <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-2 text-sm text-slate-500">
                   <Phone size={15} className="text-secondary" />
-                  +91 82386 23437
+                  {contactInfo.phoneDisplay}
                 </div>
                 <button
                   type="submit"

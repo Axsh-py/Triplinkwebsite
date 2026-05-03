@@ -1,5 +1,6 @@
 import { Plane, Hotel, Car, Compass, Shield, Headphones, CheckCircle, Star, Users, Award } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { contactInfo } from '../content/contactInfo';
 
 export function ServicesPage() {
   const services = [
@@ -198,9 +199,12 @@ export function ServicesPage() {
             <button className="bg-gradient-to-r from-secondary to-yellow-500 text-primary px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 text-sm sm:text-base">
               Get Free Consultation
             </button>
-            <button className="bg-white/10 backdrop-blur-md border-2 border-white text-white px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full hover:bg-white hover:text-primary transition-all duration-300 text-sm sm:text-base">
-              Call: +91 82386 23437
-            </button>
+            <a
+              href={`tel:${contactInfo.phoneTel}`}
+              className="bg-white/10 backdrop-blur-md border-2 border-white text-white px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full hover:bg-white hover:text-primary transition-all duration-300 text-sm sm:text-base"
+            >
+              Call: {contactInfo.phoneDisplay}
+            </a>
           </div>
         </div>
       </section>
