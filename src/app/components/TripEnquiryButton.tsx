@@ -98,21 +98,21 @@ export function TripEnquiryButton({
 
   const modal = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/65 px-4 py-6 backdrop-blur-sm"
+      className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/65 px-3 py-3 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6"
       role="dialog"
       aria-modal="true"
       aria-label={`${tripName} enquiry form`}
-      onMouseDown={(event) => {
+      onClick={(event) => {
         if (event.target === event.currentTarget) {
           setIsOpen(false);
         }
       }}
     >
       <div
-        className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-2xl"
-        onMouseDown={(event) => event.stopPropagation()}
+        className="max-h-[calc(100svh-1.5rem)] w-full max-w-2xl overflow-y-auto rounded-t-2xl bg-white shadow-2xl sm:max-h-[92vh] sm:rounded-lg"
+        onClick={(event) => event.stopPropagation()}
       >
-            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-slate-200 bg-white px-5 py-4">
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-slate-200 bg-white px-4 py-4 sm:px-5">
               <div>
                 <div className="text-xs font-bold uppercase tracking-wide text-secondary">Trip Enquiry</div>
                 <h2 className="mt-1 text-xl font-bold text-primary">{tripName}</h2>
@@ -127,7 +127,7 @@ export function TripEnquiryButton({
               </button>
             </div>
 
-            <form onSubmit={submitEnquiry} className="p-5">
+            <form onSubmit={submitEnquiry} className="p-4 sm:p-5">
               <div className="mb-5 grid gap-3 rounded-lg bg-slate-50 p-4 text-sm text-slate-700 sm:grid-cols-3">
                 {trip.duration && (
                   <div className="flex items-center gap-2">
@@ -138,7 +138,7 @@ export function TripEnquiryButton({
                 {trip.price && (
                   <div className="font-bold text-primary">{trip.price}</div>
                 )}
-                <div className="flex items-center gap-2">
+                <div className="flex min-w-0 items-center gap-2 break-all">
                   <Mail size={16} className="text-secondary" />
                   {COMPANY_EMAIL}
                 </div>

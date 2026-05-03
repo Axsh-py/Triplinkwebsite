@@ -65,6 +65,8 @@ export function Header() {
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 text-primary"
+              aria-label="Toggle navigation menu"
+              aria-expanded={isMenuOpen}
             >
               {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>

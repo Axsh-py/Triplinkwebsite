@@ -87,6 +87,13 @@ export type SiteContent = {
 };
 
 const STORAGE_KEY = 'triplink.siteContent.v1';
+const API_CONTENT_ENDPOINT = '/api/content';
+
+export type SiteContentSaveResult = {
+  persisted: 'api' | 'local';
+  updatedAt?: string;
+  warning?: string;
+};
 
 const defaultInclusions = [
   'Stay as per package category',
@@ -838,29 +845,188 @@ export function useSiteContent() {
   );
 }
 
-export function saveSiteContent(content: SiteContent) {
-  currentContent = normalizeContent(content);
-
+const cacheSiteContent = (content: SiteContent) => {
   if (isBrowser()) {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(currentContent));
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
+    } catch {
+      // The SQLite API is the source of truth; localStorage is only a fast cache.
+    }
   }
+};
 
-  notifyListeners();
+const clearCachedSiteContent = () => {
+  if (isBrowser()) {
+    try {
+      window.localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // Ignore cache cleanup failures.
+    }
+  }
+};
+
+class ApiRequestError extends Error {
+  status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = 'ApiRequestError';
+    this.status = status;
+  }
 }
 
-export function resetSiteContent() {
+const readApiError = async (response: Response) => {
+  try {
+    const payload = await response.json() as { error?: string };
+    return payload.error || response.statusText;
+  } catch {
+    return response.statusText;
+  }
+};
+
+const getAuthHeaders = (adminPasscode?: string) => {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  if (adminPasscode) {
+    headers['X-Admin-Passcode'] = adminPasscode;
+  }
+
+  return headers;
+};
+
+async function saveContentToApi(content: SiteContent, adminPasscode?: string) {
+  const response = await fetch(API_CONTENT_ENDPOINT, {
+    method: 'PUT',
+    headers: getAuthHeaders(adminPasscode),
+    body: JSON.stringify({ content }),
+  });
+
+  if (!response.ok) {
+    throw new ApiRequestError(response.status, await readApiError(response));
+  }
+
+  return response.json() as Promise<{ ok: boolean; updatedAt?: string }>;
+}
+
+async function resetContentInApi(adminPasscode?: string) {
+  const response = await fetch(API_CONTENT_ENDPOINT, {
+    method: 'DELETE',
+    headers: getAuthHeaders(adminPasscode),
+  });
+
+  if (!response.ok) {
+    throw new ApiRequestError(response.status, await readApiError(response));
+  }
+
+  return response.json() as Promise<{ ok: boolean }>;
+}
+
+export async function refreshSiteContent() {
+  if (!isBrowser()) {
+    return currentContent;
+  }
+
+  try {
+    const response = await fetch(API_CONTENT_ENDPOINT, {
+      headers: { Accept: 'application/json' },
+    });
+
+    if (!response.ok) {
+      return currentContent;
+    }
+
+    const payload = await response.json() as {
+      content?: Partial<SiteContent> | null;
+    };
+
+    if (!payload.content) {
+      return currentContent;
+    }
+
+    currentContent = normalizeContent(payload.content);
+    cacheSiteContent(currentContent);
+    notifyListeners();
+  } catch {
+    return currentContent;
+  }
+
+  return currentContent;
+}
+
+if (isBrowser()) {
+  void refreshSiteContent();
+}
+
+export async function saveSiteContent(
+  content: SiteContent,
+  adminPasscode?: string,
+): Promise<SiteContentSaveResult> {
+  const nextContent = normalizeContent(content);
+  let apiError: unknown;
+
+  if (isBrowser()) {
+    try {
+      const apiResult = await saveContentToApi(nextContent, adminPasscode);
+      currentContent = nextContent;
+      cacheSiteContent(nextContent);
+      notifyListeners();
+      return {
+        persisted: 'api',
+        updatedAt: apiResult.updatedAt,
+      };
+    } catch (error) {
+      if (error instanceof ApiRequestError && error.status === 401) {
+        throw error;
+      }
+      apiError = error;
+    }
+  }
+
+  cacheSiteContent(nextContent);
+
+  currentContent = nextContent;
+  notifyListeners();
+
+  return {
+    persisted: 'local',
+    warning: apiError instanceof Error ? apiError.message : 'Local DB API is not reachable',
+  };
+}
+
+export async function resetSiteContent(adminPasscode?: string): Promise<SiteContentSaveResult> {
+  let apiError: unknown;
+
+  if (isBrowser()) {
+    try {
+      await resetContentInApi(adminPasscode);
+      currentContent = defaultSiteContent;
+      clearCachedSiteContent();
+      notifyListeners();
+      return { persisted: 'api' };
+    } catch (error) {
+      if (error instanceof ApiRequestError && error.status === 401) {
+        throw error;
+      }
+      apiError = error;
+    }
+  }
+
   currentContent = defaultSiteContent;
-
-  if (isBrowser()) {
-    window.localStorage.removeItem(STORAGE_KEY);
-  }
+  clearCachedSiteContent();
 
   notifyListeners();
+
+  return {
+    persisted: 'local',
+    warning: apiError instanceof Error ? apiError.message : 'Local DB API is not reachable',
+  };
 }
 
-export function importSiteContent(jsonText: string) {
+export async function importSiteContent(jsonText: string, adminPasscode?: string) {
   const nextContent = normalizeContent(JSON.parse(jsonText) as Partial<SiteContent>);
-  saveSiteContent(nextContent);
+  return saveSiteContent(nextContent, adminPasscode);
 }
 
 export function exportSiteContent() {

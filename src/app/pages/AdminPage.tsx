@@ -34,6 +34,10 @@ type AdminTab = 'dashboard' | 'banners' | 'hero' | 'featured' | 'india' | 'inter
 type TripSectionKey = 'indiaTrips' | 'internationalTrips';
 
 const SESSION_KEY = 'triplink.admin.session.v1';
+const ADMIN_PASSCODE_KEY = 'triplink.admin.passcode.v1';
+const IMAGE_DIRECT_READ_LIMIT = 450_000;
+const IMAGE_UPLOAD_MAX_DIMENSION = 1600;
+const IMAGE_UPLOAD_QUALITY = 0.82;
 
 const tabs: Array<{ id: AdminTab; label: string }> = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -131,13 +135,24 @@ function getStoredSession() {
   return window.localStorage.getItem(SESSION_KEY) === 'true';
 }
 
-function setStoredSession(value: boolean) {
+function getStoredAdminPasscode() {
+  if (typeof window === 'undefined') return '';
+  return window.localStorage.getItem(ADMIN_PASSCODE_KEY) || '';
+}
+
+function getInitialAdminSession() {
+  return getStoredSession() && Boolean(getStoredAdminPasscode());
+}
+
+function setStoredSession(value: boolean, adminPasscode = '') {
   if (typeof window === 'undefined') return;
 
   if (value) {
     window.localStorage.setItem(SESSION_KEY, 'true');
+    window.localStorage.setItem(ADMIN_PASSCODE_KEY, adminPasscode);
   } else {
     window.localStorage.removeItem(SESSION_KEY);
+    window.localStorage.removeItem(ADMIN_PASSCODE_KEY);
   }
 }
 
@@ -148,6 +163,59 @@ function readImageFile(file: File) {
     reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(file);
   });
+}
+
+function loadBrowserImage(file: File) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    image.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(image);
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('Could not read image'));
+    };
+    image.src = objectUrl;
+  });
+}
+
+async function prepareImageFile(file: File) {
+  if (!file.type.startsWith('image/')) {
+    throw new Error('Please upload an image file');
+  }
+
+  if (file.type === 'image/svg+xml' || file.size <= IMAGE_DIRECT_READ_LIMIT) {
+    return readImageFile(file);
+  }
+
+  try {
+    const image = await loadBrowserImage(file);
+    const scale = Math.min(
+      1,
+      IMAGE_UPLOAD_MAX_DIMENSION / Math.max(image.naturalWidth, image.naturalHeight),
+    );
+    const width = Math.max(1, Math.round(image.naturalWidth * scale));
+    const height = Math.max(1, Math.round(image.naturalHeight * scale));
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    if (!context) {
+      return readImageFile(file);
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, width, height);
+    context.drawImage(image, 0, 0, width, height);
+
+    return canvas.toDataURL('image/jpeg', IMAGE_UPLOAD_QUALITY);
+  } catch {
+    return readImageFile(file);
+  }
 }
 
 function moveArrayItem<T>(items: T[], index: number, direction: -1 | 1) {
@@ -251,13 +319,18 @@ function ImageField({
   onChange: (value: string) => void;
 }) {
   const [isReading, setIsReading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState('');
 
   const handleFile = async (file?: File) => {
     if (!file) return;
 
     setIsReading(true);
+    setUploadMessage('');
     try {
-      onChange(await readImageFile(file));
+      onChange(await prepareImageFile(file));
+      setUploadMessage('Image ready');
+    } catch {
+      setUploadMessage('Upload failed. Try another image.');
     } finally {
       setIsReading(false);
     }
@@ -279,9 +352,17 @@ function ImageField({
             type="file"
             accept="image/*"
             className="sr-only"
-            onChange={(event) => handleFile(event.target.files?.[0])}
+            onChange={(event) => {
+              void handleFile(event.target.files?.[0]);
+              event.target.value = '';
+            }}
           />
         </label>
+        {uploadMessage && (
+          <p className={`text-xs font-medium ${uploadMessage.includes('failed') ? 'text-red-600' : 'text-emerald-700'}`}>
+            {uploadMessage}
+          </p>
+        )}
       </div>
       {value && (
         <div className="lg:col-span-2">
@@ -337,7 +418,7 @@ export function AdminPage() {
   const savedContent = useSiteContent();
   const [draft, setDraft] = useState<SiteContent>(savedContent);
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
-  const [isAuthenticated, setIsAuthenticated] = useState(getStoredSession);
+  const [isAuthenticated, setIsAuthenticated] = useState(getInitialAdminSession);
   const [passcode, setPasscode] = useState('');
   const [loginError, setLoginError] = useState('');
   const [status, setStatus] = useState('');
@@ -366,14 +447,40 @@ export function AdminPage() {
     ];
   }, [draft]);
 
-  const login = (event: FormEvent<HTMLFormElement>) => {
+  const login = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const trimmedPasscode = passcode.trim();
+    setLoginError('');
 
-    if (passcode === ADMIN_PASSCODE) {
-      setStoredSession(true);
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passcode: trimmedPasscode }),
+      });
+
+      if (response.ok) {
+        setStoredSession(true, trimmedPasscode);
+        setIsAuthenticated(true);
+        setPasscode('');
+        setStatus('Connected to local DB');
+        return;
+      }
+
+      if (response.status !== 404) {
+        setLoginError('Invalid admin passcode');
+        return;
+      }
+    } catch {
+      // Keep the admin panel usable in static/localStorage fallback mode.
+    }
+
+    if (trimmedPasscode === ADMIN_PASSCODE) {
+      setStoredSession(true, trimmedPasscode);
       setIsAuthenticated(true);
       setLoginError('');
       setPasscode('');
+      setStatus('Local DB server not connected');
       return;
     }
 
@@ -385,12 +492,20 @@ export function AdminPage() {
     setIsAuthenticated(false);
   };
 
-  const saveDraft = () => {
+  const saveDraft = async () => {
     try {
-      saveSiteContent(draft);
-      setStatus('Saved');
-    } catch {
-      setStatus('Could not save. Uploaded images may be too large for browser storage.');
+      setStatus('Saving...');
+      const result = await saveSiteContent(draft, getStoredAdminPasscode());
+      setStatus(result.persisted === 'api' ? 'Saved to local DB' : `Saved in browser only: ${result.warning}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Could not save';
+      if (message.toLowerCase().includes('unauthorized')) {
+        setStoredSession(false);
+        setIsAuthenticated(false);
+        setLoginError('Please sign in again, then save to local DB.');
+        return;
+      }
+      setStatus(`Could not save to local DB: ${message}`);
     }
   };
 
@@ -399,10 +514,10 @@ export function AdminPage() {
     setStatus('Draft reset');
   };
 
-  const restoreDefaults = () => {
+  const restoreDefaults = async () => {
     if (!window.confirm('Restore default content?')) return;
-    resetSiteContent();
-    setStatus('Defaults restored');
+    const result = await resetSiteContent(getStoredAdminPasscode());
+    setStatus(result.persisted === 'api' ? 'Defaults restored in local DB' : `Defaults restored in browser only: ${result.warning}`);
   };
 
   const updateTripSection = (sectionKey: TripSectionKey, patch: Partial<TripSection>) => {
@@ -475,10 +590,10 @@ export function AdminPage() {
     }));
   };
 
-  const importJson = () => {
+  const importJson = async () => {
     try {
-      importSiteContent(jsonText);
-      setStatus('Imported');
+      const result = await importSiteContent(jsonText, getStoredAdminPasscode());
+      setStatus(result.persisted === 'api' ? 'Imported to local DB' : `Imported in browser only: ${result.warning}`);
       setJsonText('');
     } catch {
       setStatus('Invalid JSON');

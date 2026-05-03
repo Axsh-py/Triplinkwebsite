@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MapPin, Phone } from 'lucide-react';
+import { MapPin, Menu, Phone, X } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { defaultSiteContent, useSiteContent } from '../content/siteContent';
 import { TripEnquiryButton } from './TripEnquiryButton';
@@ -8,6 +8,7 @@ import logo from '../../imports/triplink_logo_transparent.png';
 
 export function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const { heroSlides } = useSiteContent();
 
@@ -91,7 +92,54 @@ export function Hero() {
                 Book Your Adventure
               </Link>
             </div>
+
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen((value) => !value)}
+              className="lg:hidden rounded-md border border-white/20 bg-white/10 p-2 text-white backdrop-blur-sm"
+              aria-label="Toggle navigation menu"
+              aria-expanded={isMenuOpen}
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
+
+          {isMenuOpen && (
+            <div className="mt-4 rounded-lg border border-white/15 bg-black/70 p-3 shadow-2xl backdrop-blur-md lg:hidden">
+              <div className="grid gap-1">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`rounded-md px-4 py-3 text-sm font-semibold transition ${
+                      (link.path === '/' ? location.pathname === '/' : location.pathname.startsWith(link.path))
+                        ? 'bg-secondary text-primary'
+                        : 'text-white hover:bg-white/10 hover:text-secondary'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-3 grid gap-2 border-t border-white/10 pt-3">
+                <a
+                  href="tel:+918238623437"
+                  className="flex items-center justify-center gap-2 rounded-md bg-white/10 px-4 py-3 text-sm font-semibold text-white"
+                >
+                  <Phone size={16} className="text-secondary" />
+                  +91 82386 23437
+                </a>
+                <Link
+                  to="/contact"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="rounded-md bg-secondary px-4 py-3 text-center text-sm font-bold text-primary"
+                >
+                  Book Your Adventure
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
