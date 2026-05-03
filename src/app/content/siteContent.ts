@@ -88,6 +88,7 @@ export type SiteContent = {
 
 const STORAGE_KEY = 'triplink.siteContent.v1';
 const API_CONTENT_ENDPOINT = '/api/content';
+const CONTENT_SYNC_INTERVAL_MS = 5000;
 
 export type SiteContentSaveResult = {
   persisted: 'api' | 'local';
@@ -822,10 +823,28 @@ const readStoredContent = (): SiteContent => {
 };
 
 let currentContent = readStoredContent();
+let currentContentJson = JSON.stringify(currentContent);
 const listeners = new Set<() => void>();
 
 const notifyListeners = () => {
   listeners.forEach((listener) => listener());
+};
+
+const setCurrentContent = (content: SiteContent, shouldCache = true) => {
+  const nextJson = JSON.stringify(content);
+  if (nextJson === currentContentJson) {
+    return false;
+  }
+
+  currentContent = content;
+  currentContentJson = nextJson;
+
+  if (shouldCache) {
+    cacheSiteContent(content);
+  }
+
+  notifyListeners();
+  return true;
 };
 
 export function subscribeToSiteContent(listener: () => void) {
@@ -945,9 +964,7 @@ export async function refreshSiteContent() {
       return currentContent;
     }
 
-    currentContent = normalizeContent(payload.content);
-    cacheSiteContent(currentContent);
-    notifyListeners();
+    setCurrentContent(normalizeContent(payload.content));
   } catch {
     return currentContent;
   }
@@ -957,6 +974,20 @@ export async function refreshSiteContent() {
 
 if (isBrowser()) {
   void refreshSiteContent();
+
+  window.setInterval(() => {
+    void refreshSiteContent();
+  }, CONTENT_SYNC_INTERVAL_MS);
+
+  window.addEventListener('focus', () => {
+    void refreshSiteContent();
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      void refreshSiteContent();
+    }
+  });
 }
 
 export async function saveSiteContent(
@@ -969,9 +1000,7 @@ export async function saveSiteContent(
   if (isBrowser()) {
     try {
       const apiResult = await saveContentToApi(nextContent, adminPasscode);
-      currentContent = nextContent;
-      cacheSiteContent(nextContent);
-      notifyListeners();
+      setCurrentContent(nextContent);
       return {
         persisted: 'api',
         updatedAt: apiResult.updatedAt,
@@ -986,8 +1015,7 @@ export async function saveSiteContent(
 
   cacheSiteContent(nextContent);
 
-  currentContent = nextContent;
-  notifyListeners();
+  setCurrentContent(nextContent, false);
 
   return {
     persisted: 'local',
@@ -1001,9 +1029,8 @@ export async function resetSiteContent(adminPasscode?: string): Promise<SiteCont
   if (isBrowser()) {
     try {
       await resetContentInApi(adminPasscode);
-      currentContent = defaultSiteContent;
+      setCurrentContent(defaultSiteContent, false);
       clearCachedSiteContent();
-      notifyListeners();
       return { persisted: 'api' };
     } catch (error) {
       if (error instanceof ApiRequestError && error.status === 401) {
@@ -1013,10 +1040,8 @@ export async function resetSiteContent(adminPasscode?: string): Promise<SiteCont
     }
   }
 
-  currentContent = defaultSiteContent;
+  setCurrentContent(defaultSiteContent, false);
   clearCachedSiteContent();
-
-  notifyListeners();
 
   return {
     persisted: 'local',
