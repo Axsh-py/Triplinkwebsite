@@ -20,6 +20,7 @@ import {
   createContentId,
   exportSiteContent,
   importSiteContent,
+  refreshSiteContent,
   resetSiteContent,
   saveSiteContent,
   type FeaturedTrip,
@@ -419,6 +420,7 @@ export function AdminPage() {
   const [draft, setDraft] = useState<SiteContent>(savedContent);
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
   const [isAuthenticated, setIsAuthenticated] = useState(getInitialAdminSession);
+  const [isContentReady, setIsContentReady] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [loginError, setLoginError] = useState('');
   const [status, setStatus] = useState('');
@@ -427,6 +429,29 @@ export function AdminPage() {
   useEffect(() => {
     setDraft(savedContent);
   }, [savedContent]);
+
+  useEffect(() => {
+    let isActive = true;
+
+    if (!isAuthenticated) {
+      setIsContentReady(false);
+      return () => {
+        isActive = false;
+      };
+    }
+
+    setIsContentReady(false);
+    void refreshSiteContent().then((content) => {
+      if (!isActive) return;
+      setDraft(content);
+      setIsContentReady(true);
+      setStatus((previousStatus) => previousStatus || 'Loaded from local DB');
+    });
+
+    return () => {
+      isActive = false;
+    };
+  }, [isAuthenticated]);
 
   const isDirty = useMemo(
     () => JSON.stringify(draft) !== JSON.stringify(savedContent),
@@ -490,6 +515,7 @@ export function AdminPage() {
   const logout = () => {
     setStoredSession(false);
     setIsAuthenticated(false);
+    setIsContentReady(false);
   };
 
   const saveDraft = async () => {
@@ -632,6 +658,24 @@ export function AdminPage() {
               Sign In
             </button>
           </form>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isContentReady) {
+    return (
+      <div className="min-h-screen bg-slate-100 px-4 py-10 text-slate-950">
+        <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-md items-center">
+          <div className="w-full rounded-lg border border-slate-200 bg-white p-6 text-center shadow-xl">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-primary text-white">
+              <RefreshCw size={22} className="animate-spin" />
+            </div>
+            <h1 className="text-xl font-bold">Loading Admin Content</h1>
+            <p className="mt-2 text-sm text-slate-500">
+              Fetching latest trips from the local database.
+            </p>
+          </div>
         </div>
       </div>
     );
