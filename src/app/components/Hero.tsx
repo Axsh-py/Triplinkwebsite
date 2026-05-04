@@ -4,14 +4,15 @@ import { MapPin, Menu, Phone, X } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { contactInfo } from '../content/contactInfo';
 import { defaultSiteContent, useSiteContent } from '../content/siteContent';
-import { TripEnquiryButton } from './TripEnquiryButton';
+import { getTripDetailPathForTitle } from '../content/tripUtils';
 import logo from '../../imports/triplink_logo_transparent.png';
 
 export function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const { heroSlides } = useSiteContent();
+  const siteContent = useSiteContent();
+  const { heroSlides } = siteContent;
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -25,6 +26,9 @@ export function Hero() {
     const enabledSlides = heroSlides.filter((slide) => slide.enabled && slide.title && slide.image);
     return enabledSlides.length > 0 ? enabledSlides : defaultSiteContent.heroSlides;
   }, [heroSlides]);
+
+  const activeDestination = destinations[activeIndex];
+  const activeDetailsPath = getTripDetailPathForTitle(siteContent, activeDestination?.title);
 
   useEffect(() => {
     if (activeIndex >= destinations.length) {
@@ -171,11 +175,12 @@ export function Hero() {
               <Link to="/trips" className="bg-gradient-to-r from-secondary via-yellow-500 to-yellow-400 text-primary px-6 py-3 sm:px-8 sm:py-3.5 lg:px-10 lg:py-4 rounded-full font-poppins font-bold text-sm sm:text-base lg:text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 text-center">
                 Explore Now
               </Link>
-              <TripEnquiryButton
-                trip={destinations[activeIndex]}
-                label="Get Details"
+              <Link
+                to={activeDetailsPath}
                 className="border-2 border-white/40 text-white px-6 py-3 sm:px-8 sm:py-3.5 lg:px-10 lg:py-4 rounded-full font-poppins font-semibold hover:bg-white hover:text-primary transition-all duration-300 text-center text-sm sm:text-base lg:text-lg"
-              />
+              >
+                Get Details
+              </Link>
             </div>
           </div>
 

@@ -1,5 +1,6 @@
 import { ArrowRight, Zap } from 'lucide-react';
 import { useSiteContent } from '../content/siteContent';
+import { TripEnquiryButton } from './TripEnquiryButton';
 
 export function SpecialOfferStrip() {
   const { specialOffer } = useSiteContent();
@@ -22,10 +23,17 @@ export function SpecialOfferStrip() {
             </div>
           </div>
 
-          <button className="group bg-gradient-to-r from-secondary to-yellow-500 text-primary px-8 py-4 rounded-full hover:shadow-2xl transition-all duration-300 shadow-2xl hover:scale-110 flex items-center gap-2 whitespace-nowrap">
+          <TripEnquiryButton
+            trip={{
+              title: specialOffer.title,
+              price: 'Offer available',
+              route: specialOffer.body,
+            }}
+            className="group bg-gradient-to-r from-secondary to-yellow-500 text-primary px-8 py-4 rounded-full hover:shadow-2xl transition-all duration-300 shadow-2xl hover:scale-110 flex items-center gap-2 whitespace-nowrap"
+          >
             <span>{specialOffer.buttonLabel}</span>
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-300" />
-          </button>
+          </TripEnquiryButton>
         </div>
       </div>
     </section>

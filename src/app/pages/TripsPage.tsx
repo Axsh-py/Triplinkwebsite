@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, CalendarDays, MapPin, Route, Search, Users } from 'lucide-react';
 import { useSiteContent } from '../content/siteContent';
 import {
@@ -12,12 +12,22 @@ import {
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { TripEnquiryButton } from '../components/TripEnquiryButton';
 
+const getValidFilterId = (filterId: string | null) =>
+  tripFilters.some((filter) => filter.id === filterId) ? filterId || 'all' : 'all';
+
 export function TripsPage() {
   const content = useSiteContent();
-  const [activeFilter, setActiveFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const location = useLocation();
+  const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const [activeFilter, setActiveFilter] = useState(() => getValidFilterId(query.get('filter')));
+  const [searchTerm, setSearchTerm] = useState(() => query.get('search') || '');
 
   const allTrips = useMemo(() => getPublishedTrips(content), [content]);
+
+  useEffect(() => {
+    setActiveFilter(getValidFilterId(query.get('filter')));
+    setSearchTerm(query.get('search') || '');
+  }, [query]);
 
   const visibleTrips = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();

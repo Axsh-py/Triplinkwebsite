@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Award, Globe, Heart, TrendingUp, Users, Target, Eye, CheckCircle, Handshake } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import logo from '../../imports/triplink_logo_transparent.png';
@@ -310,9 +311,12 @@ export function AboutPage() {
           <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8">
             Become part of 50,000+ travelers who trust Triplink for their adventures
           </p>
-          <button className="bg-gradient-to-r from-secondary to-yellow-500 text-primary px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 text-sm sm:text-base">
+          <Link
+            to="/trips"
+            className="inline-flex bg-gradient-to-r from-secondary to-yellow-500 text-primary px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 text-sm sm:text-base"
+          >
             Start Your Journey Today
-          </button>
+          </Link>
         </div>
       </section>
     </div>

@@ -1,7 +1,29 @@
+import { type FormEvent } from 'react';
 import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
 import { contactInfo } from '../content/contactInfo';
 
 export function Contact() {
+  const submitContactForm = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const getValue = (key: string) => String(formData.get(key) || '').trim();
+    const subject = 'Travel Consultation Request - Triplink Website';
+    const body = [
+      'New consultation request from Triplink website',
+      '',
+      `Name: ${getValue('name')}`,
+      `Email: ${getValue('email')}`,
+      `Phone: ${getValue('phone')}`,
+      `Interested Destination: ${getValue('destination') || 'Not selected'}`,
+      '',
+      `Message: ${getValue('message') || 'No message added'}`,
+    ].join('\n');
+
+    window.location.href = `mailto:${contactInfo.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    event.currentTarget.reset();
+  };
+
   return (
     <section id="contact" className="py-24 bg-gradient-to-br from-primary to-blue-900 text-white relative overflow-hidden">
       <div className="absolute inset-0 opacity-10">
@@ -60,15 +82,17 @@ export function Contact() {
             <h3 className="text-2xl text-primary">Send us a Message</h3>
           </div>
 
-          <form className="space-y-6">
+          <form onSubmit={submitContactForm} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="name" className="block text-gray-700 mb-2">Full Name *</label>
                 <input
                   type="text"
                   id="name"
+                  name="name"
+                  required
                   className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary bg-gray-50 text-gray-900"
-                  placeholder="John Doe"
+                  placeholder="Your full name"
                 />
               </div>
 
@@ -77,8 +101,10 @@ export function Contact() {
                 <input
                   type="email"
                   id="email"
+                  name="email"
+                  required
                   className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary bg-gray-50 text-gray-900"
-                  placeholder="john@example.com"
+                  placeholder="you@example.com"
                 />
               </div>
             </div>
@@ -89,8 +115,10 @@ export function Contact() {
                 <input
                   type="tel"
                   id="phone"
+                  name="phone"
+                  required
                   className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary bg-gray-50 text-gray-900"
-                  placeholder="+1 (555) 123-4567"
+                  placeholder="+91 98765 43210"
                 />
               </div>
 
@@ -98,15 +126,19 @@ export function Contact() {
                 <label htmlFor="destination" className="block text-gray-700 mb-2">Interested Destination</label>
                 <select
                   id="destination"
+                  name="destination"
                   className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary bg-gray-50 text-gray-900"
                 >
-                  <option>Select destination</option>
-                  <option>Paris, France</option>
-                  <option>Bali, Indonesia</option>
-                  <option>Dubai, UAE</option>
-                  <option>Santorini, Greece</option>
+                  <option value="">Select destination</option>
+                  <option>Ladakh</option>
+                  <option>Kashmir</option>
+                  <option>Spiti</option>
+                  <option>Meghalaya</option>
+                  <option>Goa</option>
+                  <option>Kerala</option>
+                  <option>Bali</option>
+                  <option>Dubai</option>
                   <option>Maldives</option>
-                  <option>Tokyo, Japan</option>
                   <option>Other</option>
                 </select>
               </div>
@@ -116,6 +148,8 @@ export function Contact() {
               <label htmlFor="message" className="block text-gray-700 mb-2">Your Message *</label>
               <textarea
                 id="message"
+                name="message"
+                required
                 rows={5}
                 className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary bg-gray-50 resize-none text-gray-900"
                 placeholder="Tell us about your dream vacation..."

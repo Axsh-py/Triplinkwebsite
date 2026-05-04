@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { ArrowRight, Facebook, Instagram, Mail, MapPin, Phone, Youtube } from 'lucide-react';
 import { contactInfo } from '../content/contactInfo';
 import logo from '../../imports/triplink_logo_transparent.png';
 
@@ -8,7 +8,6 @@ export function Footer() {
 
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-primary to-black text-white relative overflow-hidden">
-      {/* Premium Background Pattern */}
       <div className="absolute inset-0 opacity-5" style={{
         backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M54.627 0l.83.828-1.415 1.415L51.8 0h2.827zM5.373 0l-.83.828L5.96 2.243 8.2 0H5.374zM48.97 0l3.657 3.657-1.414 1.414L46.143 0h2.828zM11.03 0L7.372 3.657 8.787 5.07 13.857 0H11.03zm32.284 0L49.8 6.485 48.384 7.9l-7.9-7.9h2.83zM16.686 0L10.2 6.485 11.616 7.9l7.9-7.9h-2.83zm20.97 0l9.315 9.314-1.414 1.414L34.828 0h2.83zM22.344 0L13.03 9.314l1.414 1.414L25.172 0h-2.83z\' fill=\'%23f4b837\' fill-opacity=\'1\' fill-rule=\'evenodd\'/%3E%3C/svg%3E")',
       }}></div>
@@ -115,9 +114,9 @@ export function Footer() {
               &copy; {currentYear} <span className="text-secondary font-semibold">Triplink</span> - India's Most Loved Travel Community. All rights reserved.
             </p>
             <div className="flex items-center gap-4 text-gray-400 font-poppins">
-              <a href="#" className="hover:text-secondary transition-colors duration-300">Privacy Policy</a>
-              <span className="text-secondary">•</span>
-              <a href="#" className="hover:text-secondary transition-colors duration-300">Terms & Conditions</a>
+              <a href={`mailto:${contactInfo.email}?subject=Privacy%20Policy%20Request`} className="hover:text-secondary transition-colors duration-300">Privacy Policy</a>
+              <span className="text-secondary">|</span>
+              <a href={`mailto:${contactInfo.email}?subject=Terms%20and%20Conditions%20Request`} className="hover:text-secondary transition-colors duration-300">Terms & Conditions</a>
             </div>
           </div>
           <p className="text-center text-gray-500 mt-6 font-light">

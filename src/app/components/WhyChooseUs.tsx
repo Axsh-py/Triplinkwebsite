@@ -79,9 +79,12 @@ export function WhyChooseUs() {
               Join 50,000+ happy travelers who have experienced the world with Triplink
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <button className="bg-gradient-to-r from-secondary via-yellow-500 to-secondary bg-size-200 text-primary px-10 py-5 rounded-full hover:bg-pos-100 transition-all duration-500 shadow-2xl hover:scale-105">
+              <Link
+                to="/trips"
+                className="bg-gradient-to-r from-secondary via-yellow-500 to-secondary bg-size-200 text-primary px-10 py-5 rounded-full hover:bg-pos-100 transition-all duration-500 shadow-2xl hover:scale-105 inline-flex items-center"
+              >
                 Explore All Trips
-              </button>
+              </Link>
               <Link
                 to="/contact"
                 className="bg-white/10 backdrop-blur-md border-2 border-white/50 text-white px-10 py-5 rounded-full hover:bg-white hover:text-primary transition-all duration-300 inline-flex items-center"

@@ -1,5 +1,7 @@
-import { Sparkles, Clock, TrendingUp, Gift, ArrowRight, MapPin, Plane } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Clock, Gift, MapPin, Sparkles, TrendingUp } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { TripEnquiryButton } from './TripEnquiryButton';
 
 export function CampaignBanners() {
   return (
@@ -59,7 +61,7 @@ export function CampaignBanners() {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-4 right-4 bg-yellow-400 text-primary px-5 py-2 rounded-full shadow-2xl animate-pulse">
-                  <span className="text-xl font-bold">🎉 40% OFF</span>
+                  <span className="text-xl font-bold">40% OFF</span>
                 </div>
               </div>
             </div>
@@ -89,22 +91,22 @@ export function CampaignBanners() {
 
               <div className="bg-white/10 backdrop-blur-sm border border-white/30 rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xl">🌧️</span>
+                  <Sparkles className="text-yellow-300" size={20} />
                   <span className="text-yellow-300 text-xs uppercase tracking-wide">Monsoon Special</span>
                 </div>
-                <h4 className="text-xl text-white mb-4">Monsoon Magic from ₹7,999</h4>
+                <h4 className="text-xl text-white mb-4">Monsoon Magic from Rs. 7,999</h4>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-white/90 text-sm">
                     <div className="w-1.5 h-1.5 bg-yellow-300 rounded-full"></div>
-                    <span>Kerala • Coorg • Munnar</span>
+                    <span>Kerala, Coorg, Munnar</span>
                   </div>
                   <div className="flex items-center gap-2 text-white/90 text-sm">
                     <div className="w-1.5 h-1.5 bg-yellow-300 rounded-full"></div>
-                    <span>Goa • Lonavala • Mahabaleshwar</span>
+                    <span>Goa, Lonavala, Mahabaleshwar</span>
                   </div>
                   <div className="flex items-center gap-2 text-white/90 text-sm">
                     <div className="w-1.5 h-1.5 bg-yellow-300 rounded-full"></div>
-                    <span>Udaipur • Mount Abu</span>
+                    <span>Udaipur, Mount Abu</span>
                   </div>
                 </div>
               </div>
@@ -114,7 +116,7 @@ export function CampaignBanners() {
                   <Clock className="text-yellow-300" size={20} />
                   <span className="text-yellow-300 text-xs uppercase tracking-wide">This Month</span>
                 </div>
-                <h4 className="text-xl text-white mb-4">Weekend Getaways ₹4,999</h4>
+                <h4 className="text-xl text-white mb-4">Weekend Getaways Rs. 4,999</h4>
                 <div className="flex flex-wrap gap-2">
                   {['Agra', 'Jaipur', 'Shimla', 'Mussoorie', 'Nainital', 'Udaipur'].map((city, index) => (
                     <span key={index} className="bg-white/10 border border-white/20 text-white px-3 py-1 rounded-full text-xs">
@@ -126,15 +128,26 @@ export function CampaignBanners() {
             </div>
 
             <div className="flex flex-wrap gap-4 justify-center pt-4">
-              <button className="group relative bg-gradient-to-r from-secondary via-yellow-500 to-yellow-400 text-primary px-10 py-4 rounded-full hover:shadow-2xl transition-all duration-500 luxury-shadow hover:scale-110 flex items-center gap-3 overflow-hidden">
+              <TripEnquiryButton
+                trip={{
+                  title: 'Summer Adventure Sale 2026',
+                  price: 'Up to 40% OFF',
+                  duration: 'Valid till May 31, 2026',
+                  route: 'Himalayan expeditions and seasonal Triplink offers',
+                }}
+                className="group relative bg-gradient-to-r from-secondary via-yellow-500 to-yellow-400 text-primary px-10 py-4 rounded-full hover:shadow-2xl transition-all duration-500 luxury-shadow hover:scale-110 flex items-center gap-3 overflow-hidden"
+              >
                 <span className="relative z-10 font-poppins font-bold text-lg">Claim Your Discount</span>
                 <ArrowRight size={22} className="relative z-10 group-hover:translate-x-2 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="absolute inset-0 animate-shimmer"></div>
-              </button>
-              <button className="glass-dark border-2 border-white/40 text-white px-10 py-4 rounded-full hover:bg-white hover:text-primary hover:border-white transition-all duration-500 font-poppins font-semibold">
+              </TripEnquiryButton>
+              <Link
+                to="/trips"
+                className="glass-dark border-2 border-white/40 text-white px-10 py-4 rounded-full hover:bg-white hover:text-primary hover:border-white transition-all duration-500 font-poppins font-semibold"
+              >
                 View All Offers
-              </button>
+              </Link>
             </div>
           </div>
         </div>

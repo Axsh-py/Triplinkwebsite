@@ -44,6 +44,35 @@ export function findTripById(content: SiteContent, tripId?: string) {
   return getPublishedTrips(content).find((trip) => trip.id === tripId);
 }
 
+const normalizeTripLookupText = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+export function getTripDetailPathForTitle(content: SiteContent, title?: string) {
+  const normalizedTitle = normalizeTripLookupText(title || '');
+
+  if (!normalizedTitle) {
+    return '/trips';
+  }
+
+  const matchingTrip = getPublishedTrips(content).find((trip) => {
+    const normalizedName = normalizeTripLookupText(trip.name);
+    return normalizedName && (
+      normalizedTitle.includes(normalizedName) ||
+      normalizedName.includes(normalizedTitle)
+    );
+  });
+
+  if (matchingTrip) {
+    return `/trips/${matchingTrip.id}`;
+  }
+
+  return `/trips?search=${encodeURIComponent(title || '')}`;
+}
+
 export function tripMatchesFilter(trip: TripWithSection, filterId: string) {
   if (filterId === 'all') return true;
 

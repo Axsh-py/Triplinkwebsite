@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, ChevronLeft, ChevronRight, Users } from 'lucide-react';
 import { defaultSiteContent, useSiteContent } from '../content/siteContent';
+import { getTripDetailPathForTitle } from '../content/tripUtils';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { TripEnquiryButton } from './TripEnquiryButton';
 
 export function TimedCardBanner() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { featuredTrips } = useSiteContent();
+  const siteContent = useSiteContent();
+  const { featuredTrips } = siteContent;
 
   const trips = useMemo(() => {
     const enabledTrips = featuredTrips.filter((trip) => trip.enabled && trip.title && trip.image);
@@ -106,13 +108,13 @@ export function TimedCardBanner() {
                       )}
                     </div>
 
-                    <TripEnquiryButton
-                      trip={trip}
+                    <Link
+                      to={getTripDetailPathForTitle(siteContent, trip.title)}
                       className="inline-flex items-center gap-2 bg-gradient-to-r from-secondary to-yellow-500 text-primary px-6 py-3 rounded-full hover:shadow-2xl transition-all duration-300 hover:scale-105 font-poppins font-bold text-sm sm:text-base"
                     >
                       Get Details
                       <ArrowRight size={18} />
-                    </TripEnquiryButton>
+                    </Link>
                   </div>
                 </div>
               </div>

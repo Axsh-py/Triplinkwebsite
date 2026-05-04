@@ -15,6 +15,7 @@ type TripCarouselSectionProps = {
 export function TripCarouselSection({ id, section, imageAlt }: TripCarouselSectionProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const visibleTrips = section.trips.filter((trip) => trip.enabled);
+  const tripsPagePath = id === 'india-trips' ? '/trips?filter=india' : '/trips?filter=international';
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
@@ -58,9 +59,12 @@ export function TripCarouselSection({ id, section, imageAlt }: TripCarouselSecti
               {section.subtitle}
             </p>
             <div>
-              <button className="bg-secondary hover:bg-yellow-500 text-black px-5 py-2 sm:px-6 sm:py-2.5 md:px-8 md:py-3 rounded-lg font-poppins font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-105 luxury-shadow">
+              <Link
+                to={tripsPagePath}
+                className="inline-flex bg-secondary hover:bg-yellow-500 text-black px-5 py-2 sm:px-6 sm:py-2.5 md:px-8 md:py-3 rounded-lg font-poppins font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-105 luxury-shadow"
+              >
                 {section.ctaLabel}
-              </button>
+              </Link>
             </div>
           </div>
         </div>
